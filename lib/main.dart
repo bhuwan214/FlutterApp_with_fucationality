@@ -24,7 +24,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Card App",
@@ -37,7 +36,9 @@ class _MyAppState extends State<MyApp> {
         ),
         cardTheme: const CardThemeData(
           elevation: 5,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
         ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.blueAccent,
@@ -53,7 +54,9 @@ class _MyAppState extends State<MyApp> {
         ),
         cardTheme: const CardThemeData(
           elevation: 5,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.blue.shade800,
@@ -61,7 +64,10 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       themeMode: _themeMode,
-      home: ProfileScreen(isDark: _themeMode == ThemeMode.dark, onThemeToggle: _toggleTheme),
+      home: ProfileScreen(
+        isDark: _themeMode == ThemeMode.dark,
+        onThemeToggle: _toggleTheme,
+      ),
     );
   }
 }
@@ -69,15 +75,19 @@ class _MyAppState extends State<MyApp> {
 class ProfileScreen extends StatefulWidget {
   final ValueChanged<bool> onThemeToggle;
   final bool isDark;
-  
-  const ProfileScreen({super.key, required this.onThemeToggle, required this.isDark});
-  
+
+  const ProfileScreen({
+    super.key,
+    required this.onThemeToggle,
+    required this.isDark,
+  });
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int selectedIndex =0;
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +96,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final pages = [
       HomePage(isDark: widget.isDark, onThemeToggle: widget.onThemeToggle),
       const Center(child: ProfileCard()),
+      const Center(child: Text('Map Page')),
+      
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(selectedIndex == 0?'Home Page':'Profile Card Example'),
+        title: Text("My Application"),
       ),
       drawer: Drawer(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
@@ -117,9 +129,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text('Home'),
-              selected:selectedIndex==0,
+              selected: selectedIndex == 0,
               onTap: () {
-                    setState(() {
+                setState(() {
                   selectedIndex = 0;
                 });
                 Navigator.pop(context);
@@ -128,20 +140,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('Profile'),
-              selected:selectedIndex==1,
-              
+              selected: selectedIndex == 1,
+
               onTap: () {
-                  setState(() {
+                setState(() {
                   selectedIndex = 1;
                 });
                 Navigator.pop(context);
-                
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.map_outlined),
+              title: const Text('Map'),
+              selected:selectedIndex==2,
+              onTap: () {
+                setState((){
+                  selectedIndex = 2;
+
+                });
+                Navigator.pop(context);
+              },
+              ),
+                                  
           ],
         ),
       ),
-      body:pages[selectedIndex],
+      body: pages[selectedIndex],
     );
   }
 }
