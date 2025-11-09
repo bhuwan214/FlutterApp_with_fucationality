@@ -6,24 +6,72 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+
+  void _toggleTheme(bool isDark) {
+    setState(() {
+      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Profile Card Demo",
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const ProfileScreen(),
+      title: "Card App",
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        ),
+        cardTheme: const CardThemeData(
+          elevation: 5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.blueAccent,
+          foregroundColor: Colors.white,
+        ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        cardTheme: const CardThemeData(
+          elevation: 5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blue.shade800,
+          foregroundColor: Colors.white,
+        ),
+      ),
+      themeMode: _themeMode,
+      home: ProfileScreen(isDark: _themeMode == ThemeMode.dark, onThemeToggle: _toggleTheme),
     );
   }
 }
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final ValueChanged<bool> onThemeToggle;
+  final bool isDark;
+  
+  const ProfileScreen({super.key, required this.onThemeToggle, required this.isDark});
+  
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -36,18 +84,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //Page options for body
 
     final pages = [
-      const HomePage(),
+      HomePage(isDark: widget.isDark, onThemeToggle: widget.onThemeToggle),
       const Center(child: ProfileCard()),
     ];
 
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedIndex == 0?'Home Page':'Profile Card Example'),
-        backgroundColor: Colors.blueAccent,
       ),
       drawer: Drawer(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 5,
         child: ListView(
           // padding:EdgeInsets.all(4),
@@ -55,11 +101,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: 80,
               width: 80,
-              child: const DrawerHeader(
-                decoration: BoxDecoration(color: Colors.blueAccent),
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                ),
                 child: Text(
                   'Navigation Menu',
-                  style: TextStyle(color: Colors.white, fontSize: 24),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontSize: 24,
+                  ),
                 ),
               ),
             ),

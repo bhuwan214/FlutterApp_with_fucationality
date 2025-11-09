@@ -28,11 +28,18 @@ class ProfileCard extends StatelessWidget {
         children:[
          CircleAvatar(
           radius: 48,
-          backgroundColor: Colors.grey.shade200,
-          backgroundImage: NetworkImage(imageUrl),
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+          backgroundImage: const NetworkImage(imageUrl),
          ),
          const SizedBox(height: 12), 
-         Text(name,style:const TextStyle(fontSize: 20,fontWeight: FontWeight.w600)),
+         Text(
+          name,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
          const SizedBox(height: 6),
           const Divider(),
           const SizedBox(height: 10),
@@ -62,9 +69,19 @@ class InfoRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, size: 18, color: Colors.grey[700]),
+        Icon(
+          icon,
+          size: 18,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         const SizedBox(width: 8),
-        Text(label, style: const TextStyle(fontSize: 14)),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
       ],
     );
   }

@@ -2,30 +2,60 @@ import 'package:flutter/material.dart';
 import 'searchbar.dart';
 import 'gridlayout.dart';
 
+class HomePage extends StatefulWidget {
+  final ValueChanged<bool> onThemeToggle;
+  final bool isDark;
 
-class HomePage extends StatelessWidget{
-  const HomePage({super.key});
+  const HomePage({
+    super.key,
+    required this.onThemeToggle,
+    required this.isDark,
+  });
 
   @override
-  Widget build(BuildContext context){
+  State<HomePage> createState() => _HomePageState();
+}
 
-  //Generating the list of image texts
+class _HomePageState extends State<HomePage> {
+  String searchQuery = "";
+
+  void _handleSearch(String newQuery) {
+    setState(() {
+      searchQuery = newQuery;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDark = widget.isDark;
+
+    //Generating the list of image texts
     return Scaffold(
-      
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
-        children:[
-          const Text("Welcome to Home Page", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-          const SearchBarApp(),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              "Welcome to Home Page",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ),
+
+          SearchBarApp(
+            isDark: isDark,
+            onThemeToggle: widget.onThemeToggle,
+            onSearch: _handleSearch,
+          ),
           const SizedBox(height: 20),
-           GridWidget()
+          GridWidget(searchQuery: searchQuery),
         ],
-      
       ),
     );
-
-
   }
 }
-

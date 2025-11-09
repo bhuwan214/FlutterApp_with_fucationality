@@ -3,46 +3,48 @@ import 'food_data.dart';
 
 
 class GridWidget extends StatelessWidget {
+  final String searchQuery;
+
   const GridWidget({
     super.key,
+    this.searchQuery = '',
   });
 
   @override
   Widget build(BuildContext context) {
+    final query = searchQuery.trim().toLowerCase();
+    final items = query.isEmpty
+        ? foodItems
+        : foodItems
+            .where((food) =>
+                food['name']!.toLowerCase().contains(query) ||
+                food['description']!.toLowerCase().contains(query))
+            .toList();
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: GridView.builder(
-     
-         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-           crossAxisCount:2,
-           crossAxisSpacing:10,
-           mainAxisSpacing:10,
-           childAspectRatio:.75,
-           
-        
-         ),
-         itemCount: foodItems.length,
-         itemBuilder: (context, index) {
-           final food = foodItems[index];
-           return ImageCard(
-             imageUrl: food['imageUrl']!,
-             name: food['name']!,
-             description: food['description']!,
-           );
-         }
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: .75,
+          ),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final food = items[index];
+            return ImageCard(
+              imageUrl: food['imageUrl']!,
+              name: food['name']!,
+              description: food['description']!,
+            );
+          },
         ),
       ),
     );
   }
 }
-
-
-
-
-
-
-
 
 
 class ImageCard extends StatelessWidget {
@@ -68,6 +70,7 @@ class ImageCard extends StatelessWidget {
           children: [
             Expanded(
               child: Image.network(
+
                 imageUrl,
                 fit: BoxFit.cover,
               ),
@@ -76,7 +79,10 @@ class ImageCard extends StatelessWidget {
             Text(
               name,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ],
         ),
