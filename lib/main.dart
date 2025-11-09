@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'profilecard.dart';
 import 'homepage.dart';
+import 'map.dart';
 
 void main() {
   runApp(const MyApp());
@@ -96,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final pages = [
       HomePage(isDark: widget.isDark, onThemeToggle: widget.onThemeToggle),
       const Center(child: ProfileCard()),
-      const Center(child: Text('Map Page')),
+      const Center(child: MapPage()),
       
     ];
 

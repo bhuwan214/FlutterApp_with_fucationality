@@ -38,7 +38,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
 
           // Called when typing starts or changes
           onChanged: (String value) {
-            controller.openView();
+            // don't call controller.openView() here to avoid reopening overlay
             widget.onSearch(value);
             setState(() {
               _isSearching = value.isNotEmpty;
@@ -49,9 +49,14 @@ class _SearchBarAppState extends State<SearchBarApp> {
           leading: IconButton(
             icon: Icon(_isSearching ? Icons.arrow_back : Icons.search),
             onPressed: () {
+              controller.openView();
+              print("search icon is clicked");
+
               if (_isSearching) {
                 // When back button pressed → reset to default state
+                print("back icon clicked");
                 controller.closeView('');
+                
                 controller.text = '';
                 widget.onSearch(''); // show all items again
                 FocusScope.of(context).unfocus(); // hide keyboard
@@ -63,7 +68,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
           ),
 
           trailing: <Widget>[
-            // ❌ Clear icon appears only while searching
+            // Clear icon appears only while searching
             if (_isSearching)
               IconButton(
                 icon: const Icon(Icons.clear),
@@ -78,16 +83,14 @@ class _SearchBarAppState extends State<SearchBarApp> {
                 },
               ),
 
-            // ☀️ Theme toggle button
+            // Theme toggle button
             Tooltip(
               message: 'Change theme',
               child: IconButton(
-                isSelected: widget.isDark,
+                icon: Icon(widget.isDark ? Icons.brightness_2_outlined : Icons.wb_sunny_outlined),
                 onPressed: () {
                   widget.onThemeToggle(!widget.isDark);
                 },
-                icon: const Icon(Icons.wb_sunny_outlined),
-                selectedIcon: const Icon(Icons.brightness_2_outlined),
               ),
             ),
           ],
