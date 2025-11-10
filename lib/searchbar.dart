@@ -31,14 +31,12 @@ class _SearchBarAppState extends State<SearchBarApp> {
             EdgeInsets.symmetric(horizontal: 16.0),
           ),
 
-          // Called when SearchBar is tapped
           onTap: () {
             controller.openView();
           },
 
           // Called when typing starts or changes
           onChanged: (String value) {
-            // don't call controller.openView() here to avoid reopening overlay
             widget.onSearch(value);
             setState(() {
               _isSearching = value.isNotEmpty;
@@ -56,7 +54,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
                 // When back button pressed → reset to default state
                 print("back icon clicked");
                 controller.closeView('');
-                
+
                 controller.text = '';
                 widget.onSearch(''); // show all items again
                 FocusScope.of(context).unfocus(); // hide keyboard
@@ -87,7 +85,11 @@ class _SearchBarAppState extends State<SearchBarApp> {
             Tooltip(
               message: 'Change theme',
               child: IconButton(
-                icon: Icon(widget.isDark ? Icons.brightness_2_outlined : Icons.wb_sunny_outlined),
+                icon: Icon(
+                  widget.isDark
+                      ? Icons.brightness_2_outlined
+                      : Icons.wb_sunny_outlined,
+                ),
                 onPressed: () {
                   widget.onThemeToggle(!widget.isDark);
                 },

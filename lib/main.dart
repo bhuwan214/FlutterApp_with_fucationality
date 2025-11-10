@@ -88,7 +88,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int selectedIndex = 0;
+  int selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
